@@ -1,0 +1,68 @@
+#include <iostream>
+
+using namespace std;
+
+int startTimes[100] = { 12, 15, 10, 18, 12, 11, 8 ,19, 16, 16, 12, 11, 10, 13 },
+    endTimes[100] = { 16, 18, 18, 20, 15, 14, 10, 20, 19, 18, 15, 13, 11, 16 };
+int n = 14;
+
+void selectionSort(int arr[], int arr2[], int n)
+{
+    int min;
+
+    for (int i = 0; i < n; i++)
+    {
+        min = i;
+
+        for (int j = i + 1; j < n; j++)
+        {
+            if (arr[j] < arr[min])
+            {
+                min = j;
+            }
+        }
+        if (min != i)
+        {
+            swap(arr[min], arr[i]);
+            swap(arr2[min], arr2[i]);
+        }
+    }
+}
+
+void printArray(int arr[], int n)
+{
+    int i;
+    for (i = 0; i < n; i++) cout << arr[i] << " ";
+    cout << endl;
+}
+
+int main()
+{
+    cout << "Initial schedule arrays: " << endl;
+    printArray(startTimes, n);
+    printArray(endTimes, n);
+
+    cout << endl;
+
+    cout << "Sorted schedule arrays: " << endl;
+    selectionSort(endTimes, startTimes, n);
+    printArray(startTimes, n);
+    printArray(endTimes, n);
+
+    cout << endl;
+
+    cout << "Event 1: " << startTimes[0] << " - " << endTimes[0] << endl;
+    int eventNumber = 2;
+    int lastEnded = endTimes[0];
+    for (int i = 1; i < n; i++)
+    {
+        if (startTimes[i] >= lastEnded)
+        {
+            cout << "Event " << eventNumber << ": " << startTimes[i] << " - " << endTimes[i] << endl;
+            eventNumber++;
+            lastEnded = endTimes[i];
+        }
+    }
+
+    return 0;
+}
