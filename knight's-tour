@@ -1,0 +1,93 @@
+#include <iostream>
+
+using namespace std;
+
+int n = 0;
+int M[100][100];
+
+const int directionsI[8] = { -2, -1, 1, 2,  2,  1, -1, -2 };
+const int directionsJ[8] = { 1,  2, 2, 1, -1, -2, -2, -1 };
+
+
+void initMatrix()
+{
+    cout << "Board size = "; cin >> n;
+    M[0][0] = 1;
+}
+
+bool isFull()
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (M[i][j] == 0) return false;
+        }
+    }
+
+    return true;
+}
+
+void printMatrix()
+{
+    static int aux = 1;
+
+    cout << "Solution number " << aux << ": " << endl;
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cout << M[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    aux++;
+
+    cout << endl << endl;
+}
+
+bool isMoveOK(int i, int j)
+{
+    if (i > n - 1 || i < 0) return false;
+    if (j > n - 1 || j < 0) return false;
+    if (M[i][j]) return false;
+
+    return true;
+}
+
+void solve(int x, int y)
+{
+    static int r = 2;
+
+    if (isFull())
+    {
+        printMatrix();
+        //exit(1);
+        return;
+    }
+
+    for (int i = 0; i < 8; i++)
+    {
+        int i_move = x + directionsI[i];
+        int j_move = y + directionsJ[i];
+
+        if (isMoveOK(i_move, j_move))
+        {
+            M[i_move][j_move] = r++;
+            solve(i_move, j_move);
+            M[i_move][j_move] = 0;
+            r--;
+            //cout << "Backtracked..." << endl;
+        }
+    }
+
+}
+
+int main()
+{
+    initMatrix();
+    solve(0, 0);
+    return 0;
+}
