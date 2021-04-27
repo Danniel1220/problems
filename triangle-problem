@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+const int n = 4;
+const int solMax = (int)pow(2, n - 1);
+
+int m[4][4] = { 2, 0, 0, 0,
+                3, 5, 0, 0,
+                6, 3, 4, 0,
+                5, 6, 1, 4 };
+string resultDigits[10000];
+int result[10000];
+
+void printSolution(string * v)
+{
+    for (int i = 1; i <= solMax; i++)
+    {
+        cout << "S" << i << " = ";
+        for (int j = 0; j < n; j++)
+        {
+            cout << v[i][j];
+            if (j != n - 1) cout << " + ";
+        }
+        cout << " = " << result[i];
+        cout << endl;
+    }
+    cout << endl;
+}
+
+int maxResult(int * v)
+{
+    int maximum = v[0];
+    for (int i = 1; i < solMax; i++)
+    {
+        if (v[i] > maximum) maximum = v[i];
+    }
+    return maximum;
+}
+
+int factor(int x)
+{
+    int aux = n;
+    for (int i = 1; i <= x; i++) aux = aux / 2;
+    return aux;
+}
+
+void solve(int i, int j, int x, int y)
+{
+    if (i < n)
+    {
+        for (int index = x; index <= y; index++)
+        {
+            resultDigits[index] = resultDigits[index] + to_string(m[i][j]);
+            result[index] = result[index] + m[i][j];
+        }
+
+        solve(i + 1, j, x, y - factor(i));
+        solve(i + 1, j + 1, x + factor(i), y);
+    }
+}
+
+int main()
+{
+    solve(0, 0, 1, solMax);
+    printSolution(resultDigits);
+    cout << "Max sum = " << maxResult(result) << endl;
+    return 0;
+}
